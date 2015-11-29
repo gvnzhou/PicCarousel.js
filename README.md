@@ -14,7 +14,7 @@ include the files
 <script src="PicCarousel.min.js"></script>
 ```
 call the the plugin on a container as your wish
-```js
+```html
 <script>
 $("#TagName").PicCarousel();
 </script>
@@ -23,7 +23,28 @@ All done!
 
 ## Options
 
-Wait...
+you can custom the caption by passing options when call the plugin, all available options are listed below.
+
+call the the plugin on a container wish you wish.
+
+```js
+$("#TagName").PicCarousel({
+    option: value,
+    option2: value2,
+    ...
+});
+```
+| Option          | default       | Description      | 
+|-----------------|---------------|------------------|
+| width           | `1000`        | Define the width of container.  |
+| height          | `300`         | Define the height of container. | 
+| posterWidth     | `520`         | Define the width of the first Photo . Maintain height and width of source image.| 
+| posterHeight    | `300`         | Define the height of the first Photo. Maintain height and width of source image.| 
+| scale           | `0.9`         | Define the show scale.    | 
+| speed           | `300`         | Define the speed of the photo carousel.   | 
+| autoPlay        | `'false'`     | A boolean to define whether support automatic play.     | 
+| delay           | `500`         | Define the delay of automatic play.    | 
+| verticalAlign   | `'middle'`    | Define position of photo.       | 
 
 
 ## Browser Support
