@@ -1,8 +1,7 @@
 # PicCarousel
-A jQuery plugin that assists carousel the picture.
+A jQuery plugin that achieve to effect of Photo Carousel.
 
 ## Demo
-
 
 * http://javion25.github.io/PicCarousel/demo/demo.html
 
@@ -16,7 +15,9 @@ include the files
 ```
 call the the plugin on a container as your wish
 ```js
-$("#container").PicCarousel();
+<script>
+$("#TagName").PicCarousel();
+</script>
 ```
 All done!
 
