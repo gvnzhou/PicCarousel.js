@@ -3,7 +3,7 @@ A jQuery plugin that achieve to effect of Photo Carousel.
 
 ## Demo
 
-* http://javion25.github.io/PicCarousel/demo/demo.html
+* http://javion25.github.io/PicCarousel.js/demo/demo.html
 
 ## Quick start
 
