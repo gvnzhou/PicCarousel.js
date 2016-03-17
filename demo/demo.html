@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>PicCarousel-Demo</title>
+	<link rel="stylesheet" href="css/picCarousel.css">
+	<script src="js/jquery.js"></script>
+	<script src="js/PicCarousel.js"></script>
+</head>
+<body>
+	<div class="poster-main A_Demo">
+		<div class="poster-btn poster-prev-btn"></div>
+		<ul class="poster-list">
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+		</ul>
+		<div class="poster-btn poster-next-btn"></div>
+	</div>
+
+	<div class="poster-main B_Demo" style="margin-top:100px">
+		<div class="poster-btn poster-prev-btn"></div>
+		<ul class="poster-list">
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+			<li class="poster-item"><a href="#"><img src="img/1.jpg" width="100%" ></a></li>
+		</ul>
+		<div class="poster-btn poster-next-btn"></div>
+	</div>
+
+<script>
+
+$(".A_Demo").PicCarousel("init");
+$(".B_Demo").PicCarousel({
+	"width":1000,		//幻灯片的宽度
+	"height":300,		//幻灯片的高度
+	"posterWidth":520,	//幻灯片第一帧的宽度
+	"posterHeight":300, //幻灯片第一张的高度
+	"scale":0.9,		//记录显示比例关系
+	"speed":500,		//记录幻灯片滚动速度
+	"autoPlay":true,	//是否开启自动播放
+	"delay":1000,		//自动播放间隔
+	"verticalAlign":"top"	//图片对齐位置
+});
+
+</script>
+
+
+
+</body>
+</html>
