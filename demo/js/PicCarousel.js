@@ -1,11 +1,11 @@
 /**
  * jQuery PicCarousel.js 
- * Version 0.1.4
+ * Version 0.1.5
  *
  * https://github.com/javion25/PicCarousel.js
  * MIT licensed
  *
- * Copyright (C) 2015 Javion.com - A project by Javion
+ * Copyright (C) 2015 Javion.me - A project by Javion
  */
 ;(function($){
 
@@ -24,33 +24,34 @@
 			/*说明：初始化插件*/
 			init:function(){
 				var me = this;
-				me.poster = me.element;
-				me.posterItemMain = me.poster.find("ul.poster-list");
-				me.nextBtn = me.poster.find("div.poster-next-btn"); 
-				me.prevBtn = me.poster.find("div.poster-prev-btn"); 
-				me.posterItems = me.poster.find("li.poster-item");
+				this.poster = this.element;
+				this.posterItemMain = this.poster.find("ul.poster-list");
+				this.nextBtn = this.poster.find("div.poster-next-btn"); 
+				this.prevBtn = this.poster.find("div.poster-prev-btn"); 
+				this.posterItems = this.poster.find("li.poster-item");
 
-				if(me.posterItems.size()%2 == 0){
-					me.posterItemMain.append(me.posterItems.ep(0).clone());
-					me.posterItems = me.posterItemMain.children;
+				if(this.posterItems.size()%2 == 0){
+					this.posterItemMain.append(this.posterItems.eq(0).clone());
+					this.posterItems = this.posterItemMain.children();
 				}
-				
-				me.posterFirstItem = me.posterItems.first();
-				me.posterLastItem = me.posterItems.last();
-				me.rotateFlag =true;
+
+				this.posterFirstItem = this.posterItems.first();
+				this.posterLastItem = this.posterItems.last();
+				this.rotateFlag =true;
 
 				//设置配置参数值
-				me.setSettingValue();
-				me.setPosterPost();
+				this.setSettingValue();
+				this.setPosterPost();
 
-				me.nextBtn.click(function(){
+				this.nextBtn.click(function(){
 					if(me.rotateFlag){
 						me.rotateFlag = false;
 						me.carouseRotate("left");
+						console.log(me.posterFirstItem.attr('id'));
 					};
 				});
 
-				me.prevBtn.click(function(){
+				this.prevBtn.click(function(){
 					if(me.rotateFlag){
 						me.rotateFlag = false;
 						me.carouseRotate("right");
@@ -58,9 +59,9 @@
 				});
 
 				//是否开启自动播放
-				if(me.settings.autoPlay){
-					me.autoPlay();
-					me.poster.hover(function(){
+				if(this.settings.autoPlay){
+					this.autoPlay();
+					this.poster.hover(function(){
 						window.clearInterval(me.timer);
 					},function(){
 						me.autoPlay();
@@ -92,11 +93,11 @@
 							top = prev.css("top");
 							zIndexArr.push(zIndex);
 							self.animate({
-									width:width,
-									height:height,
-									opacity:opacity,
-									left:left,
-									top:top
+								width:width,
+								height:height,
+								opacity:opacity,
+								left:left,
+								top:top
 							},me.settings.speed,function(){
 								me.rotateFlag = true;
 							});
