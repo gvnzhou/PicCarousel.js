@@ -30,11 +30,6 @@
 				this.prevBtn = this.poster.find("div.poster-prev-btn"); 
 				this.posterItems = this.poster.find("li.poster-item");
 
-				if(this.posterItems.size()%2 == 0){
-					this.posterItemMain.append(this.posterItems.eq(0).clone());
-					this.posterItems = this.posterItemMain.children();
-				}
-
 				this.posterFirstItem = this.posterItems.first();
 				this.posterLastItem = this.posterItems.last();
 				this.rotateFlag =true;
@@ -171,6 +166,12 @@
 				var lw = rightSlice.last().width(),
 					lh = rightSlice.last().height(),
 					oloop = Math.floor(me.posterItems.size()/2);
+
+				// 图片数量为双数时多缩小一倍
+                if(me.posterItems.length%2==0){
+                    lw=lw * me.settings.scale;
+                    lh=lh * me.settings.scale;
+                }
 
 				leftSlice.each(function(i){
 					$(this).css({
