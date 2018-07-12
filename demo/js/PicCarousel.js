@@ -6,6 +6,7 @@
  * MIT licensed
  *
  * Copyright (C) 2015 Javion.me - A project by Javion
+ * wanghsinche@hotmail.com 更新修改于201807，采用css3动画，加入点击某个幻灯片直接滑动过去的功能，加入滑动事件。
  */
 ;(function($){
 
@@ -24,6 +25,7 @@
 			/*说明：初始化插件*/
 			init:function(){
 				var me = this;
+				this.currentIndex = 0;
 				this.poster = this.element;
 				this.posterItemMain = this.poster.find("ul.poster-list");
 				this.nextBtn = this.poster.find("div.poster-next-btn"); 
@@ -46,92 +48,134 @@
 				this.nextBtn.click(function(){
 					if(me.rotateFlag){
 						me.rotateFlag = false;
-						me.carouseRotate("left");
-						console.log(me.posterFirstItem.attr('id'));
+						me.carouseRotate(-1);
 					};
 				});
 
 				this.prevBtn.click(function(){
 					if(me.rotateFlag){
 						me.rotateFlag = false;
-						me.carouseRotate("right");
+						me.carouseRotate(1);
 					};
 				});
+				// 绑定滑动
+		        this.poster.on('swipe', function (e, drt) {
+		          if (drt === 'left') {
+		            me.nextBtn.click();
+		          } else {
+		            me.prevBtn.click();
+		          }
+		        })
+
+		        this.bindSwipe();
+
+				this.posterItems.click(function(){
+					var result1 =  $(this).data('index') - me.currentIndex;
+					var result2 = $(this).data('index') - me.posterItems.size() - me.currentIndex;
+					var iterate = Math.abs(result1) < Math.abs(result2) ? -1 * result1 : -1 * result2;
+					me.carouseRotate(iterate);
+				})
 
 				//是否开启自动播放
 				if(this.settings.autoPlay){
 					this.autoPlay();
-					this.poster.hover(function(){
-						window.clearInterval(me.timer);
-					},function(){
-						me.autoPlay();
-					});
+					this.poster.on('touchstart, mouseover', function () {
+			            window.clearInterval(me.timer)
+			          }).on('touchend, mouseout', function () {
+			            me.autoPlay()
+			          });
 				}
 			},
 
 			//自动播放方法
 			autoPlay:function(){
 				var me = this;
+				if(me.timer){
+					window.clearInterval(me.timer);
+				}
 				me.timer = window.setInterval(function(){
 					me.nextBtn.click();
 				},me.settings.delay);
 			},
-
+			// 绑定滑动
+			bindSwipe: function () {
+				var startX, startY, me = this
+				var deltaX, deltaY
+				me.poster.on('touchstart', function (e) {
+				  startX = e.touches[0].clientX
+				  startY = e.touches[0].clientY
+				})
+				me.poster.on('touchmove', function (e) {
+				  deltaX = e.touches[0].clientX,
+				  deltaY = e.touches[0].clientY
+				})
+				me.poster.on('touchend', function (e) {
+				  deltaX = deltaX - startX
+				  deltaY = deltaY - startY
+				  if (Math.abs(deltaX) - Math.abs(deltaY) > 20) {
+				    if (deltaX > 0) {
+				      me.poster.trigger('swipe', 'right')
+				    } else {
+				      me.poster.trigger('swipe', 'left')
+				    }
+				  }
+				})
+			},
 			//旋转方法
-			carouseRotate:function(dir){
-				var me = this;
-				var zIndexArr = [];
-				if(dir === "left"){
-					me.posterItems.each(function(){
-						var self = $(this),
-							prev = self.prev().get(0)?self.prev():me.posterLastItem,
-							width = prev.width(),
-							height = prev.height(),
-							zIndex = prev.css("zIndex"),
-							opacity = prev.css("opacity"),
-							left = prev.css("left"),
-							top = prev.css("top");
-							zIndexArr.push(zIndex);
-							self.animate({
-								width:width,
-								height:height,
-								opacity:opacity,
-								left:left,
-								top:top
-							},me.settings.speed,function(){
-								me.rotateFlag = true;
-							});
-					});
-					me.posterItems.each(function(i){
-						$(this).css("zIndex",zIndexArr[i]);
-					})
-				}else if(dir === "right"){
-					me.posterItems.each(function(){
-						var self = $(this),
-							next = self.next().get(0)?self.next():me.posterFirstItem,
-							width = next.width(),
-							height = next.height(),
-							zIndex = next.css("zIndex"),
-							opacity = next.css("opacity"),
-							left = next.css("left"),
-							top = next.css("top");
-							zIndexArr.push(zIndex);
-							self.animate({
-									width:width,
-									height:height,
-									opacity:opacity,
-									left:left,
-									top:top
-							},me.settings.speed,function(){
-								me.rotateFlag = true;
-							});
-					});
-					me.posterItems.each(function(i){
-						$(this).css("zIndex",zIndexArr[i]);
-					})
+			getTargetIndex: function(index, num, length){
+				var result = index + num;
+				if (result < 0) {
+					return length + result;
+				}
+				else if (result >= length) {
+					return result - length;
+				}
+				else{
+					return result;
 				}
 			},
+			carouseRotate:function(num){
+				var me = this;
+				var cssArr = []
+				if (num === 0){
+					return;
+				}
+				me.posterItems.each(function(index){
+					var self = $(this),	
+						targetIndex = me.getTargetIndex(index, num, me.posterItems.length),
+						target = me.posterItems.eq(targetIndex),
+						width = target.width(),
+						height = target.height(),
+						zIndex = target.css("zIndex"),
+						opacity = target.css("opacity"),
+						left = target.css("left"),
+						top = target.css("top");
+					cssArr.push({
+						zIndex: zIndex,
+						width: width,
+						height: height,
+						opacity: opacity,
+						left: left,
+						top: top,
+						'transition': 'all ' + me.settings.speed / 1000 + 's ease',
+						'-webkit-transition': 'all ' + me.settings.speed / 1000 + 's ease'})
 
+					self.one('transitionend webkitTransitionEnd', function () {
+						self.off('transitionend webkitTransitionEnd')
+						me.rotateFlag = true
+					});
+				});
+
+		        me.posterItems.each(function (i) {
+		          $(this).css(cssArr[i])
+		        });
+
+				if (this.currentIndex === 0) {
+					this.currentIndex = this.posterItems.size();
+				} 
+				this.currentIndex -= num;
+				this.currentIndex %= this.posterItems.size();
+			},			
 			//设置剩余的帧的位置关系
 			setPosterPost:function(){
 				var me = this;
@@ -213,6 +257,10 @@
 				me.poster.css({
 					width:me.settings.width,
 					height:me.settings.height
+				});
+
+				me.posterItems.each(function(index, ele){
+					$(ele).data('index', index);
 				});
 
 				me.posterItemMain.css({
